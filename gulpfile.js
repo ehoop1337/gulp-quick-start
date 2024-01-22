@@ -1,6 +1,5 @@
 import gulp from 'gulp';
 import pug from 'gulp-pug';
-import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
 import rename from 'gulp-rename';
 import autoprefixer from 'gulp-autoprefixer';
@@ -49,10 +48,7 @@ function cleanDist(cb) {
 // HTML
 
 function html(cb) {
-  return gulp
-    .src(paths.pug.input)
-    .pipe(pug())
-    .pipe(gulp.dest(paths.pug.output));
+  return gulp.src(paths.pug.input).pipe(pug()).pipe(gulp.dest(paths.pug.output));
   cb();
 }
 
@@ -64,12 +60,7 @@ function css(cb) {
     .pipe(gulpIf(process.env.NODE_ENV === 'production', sourcemaps.init()))
     .pipe(sass.sync().on('error', sass.logError))
     .pipe(autoprefixer({ cascade: false }))
-    .pipe(
-      gulpIf(
-        process.env.NODE_ENV === 'production',
-        cleanCSS({ compatibility: 'ie8' }),
-      ),
-    )
+    .pipe(gulpIf(process.env.NODE_ENV === 'production', cleanCSS({ compatibility: 'ie8' })))
     .pipe(rename(paths.css.name))
     .pipe(gulpIf(process.env.NODE_ENV === 'production', sourcemaps.write()))
     .pipe(gulp.dest(paths.css.output));
@@ -84,8 +75,7 @@ function js(cb) {
     .pipe(gulpIf(process.env.NODE_ENV === 'production', sourcemaps.init()))
     .pipe(
       webpack({
-        mode:
-          process.env.NODE_ENV === 'production' ? 'production' : 'development',
+        mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
         entry: {
           main: paths.js.input,
         },
@@ -105,7 +95,7 @@ function js(cb) {
             },
           ],
         },
-      }),
+      })
     )
     .pipe(gulpIf(process.env.NODE_ENV === 'production', sourcemaps.write()))
     .pipe(gulp.dest(paths.js.output));
@@ -115,34 +105,22 @@ function js(cb) {
 // Fonts
 
 function ttfToEot(cb) {
-  return gulp
-    .src(paths.font.input)
-    .pipe(ttf2eot())
-    .pipe(gulp.dest(paths.font.output));
+  return gulp.src(paths.font.input).pipe(ttf2eot()).pipe(gulp.dest(paths.font.output));
   cb();
 }
 
 function ttfToSvg(cb) {
-  return gulp
-    .src(paths.font.input)
-    .pipe(ttf2svg())
-    .pipe(gulp.dest(paths.font.output));
+  return gulp.src(paths.font.input).pipe(ttf2svg()).pipe(gulp.dest(paths.font.output));
   cb();
 }
 
 function ttfToWoff(cb) {
-  return gulp
-    .src(paths.font.input)
-    .pipe(ttf2woff())
-    .pipe(gulp.dest(paths.font.output));
+  return gulp.src(paths.font.input).pipe(ttf2woff()).pipe(gulp.dest(paths.font.output));
   cb();
 }
 
 function ttfToWoff2(cb) {
-  return gulp
-    .src(paths.font.input)
-    .pipe(ttf2woff2())
-    .pipe(gulp.dest(paths.font.output));
+  return gulp.src(paths.font.input).pipe(ttf2woff2()).pipe(gulp.dest(paths.font.output));
   cb();
 }
 
@@ -171,7 +149,7 @@ function image(cb) {
             },
           ],
         }),
-      ]),
+      ])
     )
     .pipe(gulp.dest(paths.img.output));
   cb();
@@ -181,6 +159,7 @@ function video(cb) {
   return gulp.src(paths.mov.input).pipe(gulp.dest(paths.mov.output));
   cb();
 }
+
 function doc(cb) {
   return gulp.src(paths.doc.input).pipe(gulp.dest(paths.doc.output));
   cb();
@@ -191,16 +170,12 @@ function libsCss(cb) {
     .src(libs.css.paths)
     .pipe(gulpIf(process.env.NODE_ENV === 'production', sourcemaps.init()))
     .pipe(concat(libs.css.name.basename + libs.css.name.extname))
-    .pipe(
-      gulpIf(
-        process.env.NODE_ENV === 'production',
-        cleanCSS({ compatibility: 'ie8' }),
-      ),
-    )
+    .pipe(gulpIf(process.env.NODE_ENV === 'production', cleanCSS({ compatibility: 'ie8' })))
     .pipe(gulpIf(process.env.NODE_ENV === 'production', sourcemaps.write()))
     .pipe(gulp.dest(libs.css.output));
   cb();
 }
+
 function libsJs(cb) {
   return gulp
     .src(libs.js.paths)
@@ -216,10 +191,7 @@ function startWatchFiles() {
   gulp.watch(paths.pug.watch, gulp.series(html, browsersyncReload));
   gulp.watch(paths.js.watch, gulp.series(js, browsersyncReload));
   gulp.watch(paths.css.watch, gulp.series(css, browsersyncReload));
-  gulp.watch(
-    paths.font.watch,
-    gulp.series(ttf2eot, ttf2svg, ttf2woff, ttf2woff2, ttf, browsersyncReload),
-  );
+  gulp.watch(paths.font.watch, gulp.series(ttf2eot, ttf2svg, ttf2woff, ttf2woff2, ttf, browsersyncReload));
   gulp.watch(paths.img.watch, gulp.series(image, browsersyncReload));
   gulp.watch(paths.mov.watch, gulp.series(video, browsersyncReload));
   gulp.watch(paths.doc.watch, gulp.series(doc, browsersyncReload));
@@ -243,11 +215,6 @@ export const build = gulp.series(
   video,
   doc,
   libsJs,
-  libsCss,
+  libsCss
 );
-export const dev = gulp.series(
-  cleanDist,
-  build,
-  startWatchServer,
-  startWatchFiles,
-);
+export const dev = gulp.series(cleanDist, build, startWatchServer, startWatchFiles);

@@ -1,3 +1,4 @@
 src/assets/libs
 dist
 node_modules
+gulpfile.js
