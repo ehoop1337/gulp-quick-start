@@ -1,0 +1,29 @@
+@import './mixins';
+
+/* Глобальные стили */
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+/* Вызываем миксин font-face для подключение шрифта */
+@include font-face('Circe', 'Circe-Regular', 400);
+
+/* Основные стили */
+body {
+  position: relative;
+
+  display: block;
+
+  font-family: Circle, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+
+  > div {
+    color: #000;
+  }
+}
+
+/* Подключаем стили секций */
+@import '../../sections/example/example';
