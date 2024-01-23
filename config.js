@@ -48,15 +48,15 @@ export const paths = {
 // Libraries
 export const libs = {
   css: {
-    paths: ['./node_modules/normalize.css/normalize.css', './src/assets/libs/fancybox.css'],
+    paths: generalPath.source + '/assets/libs/**/*.css',
     output: generalPath.bundle + '/assets/css',
     name: { basename: 'libs', extname: '.min.css' },
-    watch: generalPath.source + '/assets/libs/**/*',
+    watch: generalPath.source + '/assets/libs/**/*.css',
   },
   js: {
-    paths: ['./src/assets/libs/fancybox.umd.js'],
+    paths: generalPath.source + '/assets/libs/**/*.js',
     output: generalPath.bundle + '/assets/js',
     name: { basename: 'libs', extname: '.min.js' },
-    watch: generalPath.source + '/assets/libs/**/*',
+    watch: generalPath.source + '/assets/libs/**/*.js',
   },
 };
